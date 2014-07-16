@@ -157,7 +157,7 @@ for f in files :
     ### GABOR FILTERING
 
     # Define scales and orientations to compute over
-    pixelscales = np.arange(15, 55, 4)
+    pixelscales = np.arange(15, 55, 2)
     gaborscales = 4. / pixelscales # 2 to 20 pixels
 
     orientations = np.linspace(0, np.pi * 11./12., 12) # 0 to 180 degrees in 15 degree increments
