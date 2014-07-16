@@ -1,0 +1,16 @@
+#PBS -l nodes=1:ppn=1
+#PBS -l mem=4gb
+#PBS -l walltime=20:00:00
+#PBS -N Soay4x_fullbatch
+#PBS -M qcaudron@princeton.edu
+#PBS -m bea
+#PBS -j oe
+#PBS -t 0-99
+
+cd $PBS_O_WORKDIR
+echo $PBS_O_WORKDIR
+echo Running on $(hostname)
+echo Started at $(date)
+
+python batch.py $PBS_ARRAYID
+#echo Array Index $PBS_ARRAYID
