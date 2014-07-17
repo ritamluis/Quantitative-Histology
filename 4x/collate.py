@@ -262,13 +262,13 @@ if not os.path.exists("results/plots") :
 
 # Directionality
 x = np.linspace(np.min(directionality), np.max(directionality), 200)[:, np.newaxis]
-y = KernelDensity(bandwidth=0.025).fit(np.array(directionality)[:, np.newaxis])
+y = KernelDensity(bandwidth=0.03).fit(np.array(directionality)[:, np.newaxis])
 #yc = KernelDensity(bandwidth=0.025).fit(np.array(control["directionality"])[:, np.newaxis])
 #ys = KernelDensity(bandwidth=0.025).fit(np.array(soay["directionality"])[:, np.newaxis])
 
 
 fig = plt.figure(figsize=(xdim*210/scalefactor, ydim*115/scalefactor))
-plt.hist(directionality, 20, normed=True, color=colours[0], alpha=0.5)
+plt.hist(directionality, 30, normed=True, color=colours[0], alpha=0.5)
 plt.plot(x, np.exp(y.score_samples(x)), linewidth=3, c=colours[0])
 
 #plt.hist(soay["directionality"], 20, normed=True, color=colours[2], alpha=0.5)
@@ -304,11 +304,11 @@ y = KernelDensity(bandwidth=1.2, kernel="gaussian").fit(np.array(scale)[:, np.ne
 #yc = KernelDensity(bandwidth=1.2, kernel="gaussian").fit(np.array(control["scale"])[:, np.newaxis])
 #ys = KernelDensity(bandwidth=1.2, kernel="gaussian").fit(np.array(soay["scale"])[:, np.newaxis])
 
-bins = np.arange(15, 55, 4) # [4.5, 5.5, 6.5, 7.5, 9, 11, 13.5, 18]
 
 fig = plt.figure(figsize=(xdim*210/scalefactor, ydim*115/scalefactor))
-plt.hist(scale, bins=bins, normed=True, color=colours[0], alpha=0.5)
+plt.hist(scale, bins=np.unique(scale), normed=True, color=colours[0], alpha=0.5, align="left")
 plt.plot(x, np.exp(y.score_samples(x)), linewidth=3, c=colours[0])
+plt.xticks(np.unique(scale)[::2])
 
 #plt.hist(soay["scale"], bins=bins, normed=True, color=colours[2], alpha=0.5)
 #plt.plot(x, np.exp(ys.score_samples(x)), linewidth=3, c=colours[2])
@@ -357,11 +357,11 @@ fig = plt.figure(figsize=(xdim*210/scalefactor, ydim*115/scalefactor))
 #plt.subplot(121)
 
 x = np.linspace(np.min(nonnormlac), np.max(nonnormlac), 200)[:, np.newaxis]
-y = KernelDensity(bandwidth=0.015).fit(np.array(nonnormlac[:, 0])[:, np.newaxis])
+y = KernelDensity(bandwidth=0.0075).fit(np.array(nonnormlac[:, 0])[:, np.newaxis])
 #yc = KernelDensity(bandwidth=0.015).fit(controllac1)
 #ys = KernelDensity(bandwidth=0.015).fit(soaylac1)
 
-plt.hist(nonnormlac, 20, normed=True, color=colours[0], alpha=0.5)
+plt.hist(nonnormlac, 30, normed=True, color=colours[0], alpha=0.5)
 plt.plot(x, np.exp(y.score_samples(x)), linewidth=3, c=colours[0])
 
 #plt.hist(soaylac1, 20, normed=True, color=colours[2], alpha=0.5)
@@ -531,7 +531,7 @@ x = np.linspace(np.min(entropy), np.max(entropy), 200)[:, np.newaxis]
 y = KernelDensity(bandwidth=0.005).fit(np.array(entropy[:, 0])[:, np.newaxis])
 #ys = KernelDensity(bandwidth=0.005).fit(soaylac1)
 
-plt.hist(entropy, 20, normed=True, color=colours[0], alpha=0.5)
+plt.hist(entropy, 30, normed=True, color=colours[0], alpha=0.5)
 plt.plot(x, np.exp(y.score_samples(x)), linewidth=3, c=colours[0])
 
 #plt.hist(soaylac1, 20, normed=True, color=colours[2], alpha=0.5)
@@ -577,6 +577,119 @@ plt.tight_layout()
 
 plt.savefig("results/plots/entropy.pdf")
 plt.close()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Inflammatory Foci
+x = np.linspace(np.min(inflcount), np.max(inflcount), 200)[:, np.newaxis]
+y = KernelDensity(bandwidth=1.2, kernel="gaussian").fit(np.array(inflcount)[:, np.newaxis])
+#yc = KernelDensity(bandwidth=1.2, kernel="gaussian").fit(np.array(control["scale"])[:, np.newaxis])
+#ys = KernelDensity(bandwidth=1.2, kernel="gaussian").fit(np.array(soay["scale"])[:, np.newaxis])
+
+
+fig = plt.figure(figsize=(xdim*210/scalefactor, ydim*115/scalefactor))
+plt.hist(inflcount, bins=np.unique(inflcount), normed=True, color=colours[0], alpha=0.5, align="left")
+plt.plot(x, np.exp(y.score_samples(x)), linewidth=3, c=colours[0])
+
+xl1 = np.where(y.score_samples(x) > -8)
+xl2 = np.where(y.score_samples(x) > -8)
+xrange = np.append(xl1, xl2)
+plt.xlim(0, x[np.max(xrange)])
+
+#plt.xticks([0, np.unique(scale)[::5])
+
+#plt.hist(soay["scale"], bins=bins, normed=True, color=colours[2], alpha=0.5)
+#plt.plot(x, np.exp(ys.score_samples(x)), linewidth=3, c=colours[2])
+
+#mwu, mwp = mannwhitneyu(control["scale"], soay["scale"])
+#plt.legend(["Control", "Soay"])
+plt.title("Inflammatory Foci") # Distribution\nMann-Whitney U = %d, p = %.2e" % (mwu, 2*mwp))
+plt.xlabel("Count")
+plt.ylabel("Density")
+plt.savefig("results/plots/foci.pdf")
+plt.close()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Tissue to Sinusoid Ratio
+x = np.linspace(np.min(ratio), np.max(ratio), 200)[:, np.newaxis]
+y = KernelDensity(bandwidth=0.008, kernel="gaussian").fit(np.array(ratio)[:, np.newaxis])
+#yc = KernelDensity(bandwidth=1.2, kernel="gaussian").fit(np.array(control["scale"])[:, np.newaxis])
+#ys = KernelDensity(bandwidth=1.2, kernel="gaussian").fit(np.array(soay["scale"])[:, np.newaxis])
+
+
+fig = plt.figure(figsize=(xdim*210/scalefactor, ydim*115/scalefactor))
+plt.hist(ratio, 30, normed=True, color=colours[0], alpha=0.5)
+plt.plot(x, np.exp(y.score_samples(x)), linewidth=3, c=colours[0])
+
+xl1 = np.where(y.score_samples(x) > -8)
+xl2 = np.where(y.score_samples(x) > -8)
+xrange = np.append(xl1, xl2)
+plt.xlim(x[np.min(xrange)], x[np.max(xrange)])
+
+#plt.xticks([0, np.unique(scale)[::5])
+
+#plt.hist(soay["scale"], bins=bins, normed=True, color=colours[2], alpha=0.5)
+#plt.plot(x, np.exp(ys.score_samples(x)), linewidth=3, c=colours[2])
+
+#mwu, mwp = mannwhitneyu(control["scale"], soay["scale"])
+#plt.legend(["Control", "Soay"])
+plt.title("Tissue to Sinusoid Ratio") # Distribution\nMann-Whitney U = %d, p = %.2e" % (mwu, 2*mwp))
+plt.xlabel("Ratio")
+plt.ylabel("Density")
+plt.savefig("results/plots/ratio.pdf")
+plt.close()
+
+
+
 
 
 
