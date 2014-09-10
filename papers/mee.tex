@@ -1,0 +1,332 @@
+% Template for PLoS
+% Version 1.0 January 2009
+%
+% To compile to pdf, run:
+% latex plos.template
+% bibtex plos.template
+% latex plos.template
+% latex plos.template
+% dvipdf plos.template
+
+\documentclass[10pt]{article}
+
+% amsmath package, useful for mathematical formulas
+\usepackage{amsmath}
+% amssymb package, useful for mathematical symbols
+\usepackage{amssymb}
+
+% graphicx package, useful for including eps and pdf graphics
+% include graphics with the command \includegraphics
+\usepackage{graphicx}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[icelandic,english]{babel}
+\usepackage{float}
+
+% cite package, to clean up citations in the main text. Do not remove.
+\usepackage{cite}
+
+\usepackage{color} 
+
+% Use doublespacing - comment out for single spacing
+%\usepackage{setspace} 
+%\doublespacing
+
+
+% Text layout
+\topmargin 0.0cm
+\oddsidemargin 0.5cm
+\evensidemargin 0.5cm
+\textwidth 16cm 
+\textheight 21cm
+
+% Bold the 'Figure #' in the caption and separate it with a period
+% Captions will be left justified
+\usepackage[labelfont=bf,labelsep=period,justification=raggedright]{caption}
+
+% Use the PLoS provided bibtex style
+\bibliographystyle{plos2009}
+
+% Remove brackets from numbering in List of References
+\makeatletter
+\renewcommand{\@biblabel}[1]{\quad#1.}
+\makeatother
+
+
+% Leave date blank
+\date{}
+
+\pagestyle{myheadings}
+%% ** EDIT HERE **
+
+
+%% ** EDIT HERE **
+%% PLEASE INCLUDE ALL MACROS BELOW
+
+%% END MACROS SECTION
+
+\begin{document}
+
+% Title must be 150 characters or less
+\begin{flushleft}
+{\Large
+\textbf{Title Here}
+}
+% Insert Author names, affiliations and corresponding author email.
+\\
+Q. Caudron$^{1,\ast}$, 
+R. Garnier$^{1}$, 
+T. A. Aboellail$^2$,
+Others, 
+B. T. Grenfell$^{1,3}$
+A. Graham$^1$,
+\\
+\bf{1} Department of Ecology and Evolutionary Biology, Princeton University, Princeton, NJ, USA
+\\
+\bf{2} Department of Microbiology, Immunology, and Pathology, Colorado State University, Fort Collins, CO, USA
+\\
+\bf{3} Fogarty International Center, National Institutes of Health, Bethesda, MD, USA
+\\
+$\ast$ E-mail: qcaudron@princeton.edu
+\end{flushleft}
+
+
+
+
+
+
+
+
+
+
+
+
+
+% Please keep the abstract between 250 and 300 words
+\section*{Abstract}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\section*{Introduction}
+
+
+Where histopathology is used
+
+
+
+Current problems with histopathology
+
+
+
+Advantages of automation
+
+
+
+Our methodology
+
+
+
+
+
+
+
+
+
+
+
+\section*{Methods}
+
+Image capture pipeline
+
+
+
+Image format and preprocessing
+
+
+
+Sigmoid adjustment for contrast
+
+
+
+Adaptive threshold on luminosity
+
+
+
+Cleaning - Removing small objects
+
+
+
+Measures :
+GABOR - phase-insensitive
+1 Gabor filter directionality
+2 Gabor filter scale
+3 normalised Lacunarity
+4 Shannon entropy
+5 Deconvolution foci count
+6 Tissue / sinusoid ratio
+
+
+
+
+
+
+
+
+
+
+
+% Results and Discussion can be combined.
+\section*{Results}
+
+	 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\section*{Discussion}
+
+
+
+
+
+
+
+
+
+
+
+% Do NOT remove this, even if you are not including acknowledgments
+\section*{Acknowledgements}
+
+QC and BTG were supported by funding from the US Department of Homeland Security contract HSHQDC-12-C-00058. BTG acknowledges support from the Bill \& Melinda Gates Foundation. BTG was funded by the RAPIDD program of the Science and Technology Directorate, Department of Homeland Security, and the Fogarty International Center, National Institutes of Health. 
+
+
+
+
+
+
+
+
+%\section*{References}
+% The bibtex filename
+\bibliography{qbib}
+
+\section*{Figure Legends}
+%\begin{figure}[!ht]
+%\begin{center}
+%%\includegraphics[width=4in]{figure_name.2.eps}
+%\end{center}
+%\caption{
+%{\bf Bold the first sentence.}  Rest of figure 2  caption.  Caption 
+%should be left justified, as specified by the options to the caption 
+%package.
+%}
+%\label{Figure_label}
+%\end{figure}
+
+
+\section*{Tables}
+%\begin{table}[!ht]
+%\caption{
+%\bf{Table title}}
+%\begin{tabular}{|c|c|c|}
+%table information
+%\end{tabular}
+%\begin{flushleft}Table caption
+%\end{flushleft}
+%\label{tab:label}
+% \end{table}
+
+
+
+\vspace{0.4cm}
+\begin{table}[!h]
+\centering
+\begin{tabular}{ l c c c }
+\hline \\[-0.9em]
+\textbf{Locality} & Population & Birth rate & {$\mathbf{\tau}$} \\[0.1em]
+  \hline \\[-0.9em]        
+  Bornholm & 47100 & 19.4 & 15 \\[0.1em]
+  Faroe Islands & 28200 & 29.4 & 15 \\[0.1em]
+  Reykjav\'{i}k & 47100 & 24.1 & 18 \\[0.1em]
+  Hafnarfj\"{o}r\dh{}ur & 6000 & 22.4 &  8 \\[0.1em]           
+  Akureyri & 7000 & 22.7 & 19 \\[0.1em]
+  Vestmannaeyjar \hspace{0.2cm} & 3600 & 23.5 & 7 \\[0.1em]
+  \hline  
+\end{tabular}
+\caption{Mean population sizes, birth rates, and sensitivity thresholds $\tau$ for each locality. Population sizes and annual birth rates per thousand are given as the mean over the study period. Thresholds were fit by maximising the correlation between the mean simulated epidemic time-series and the reported incidence data.}
+\label{tableTau}
+\end{table}
+
+
+
+
+
+\section*{Figures}
+
+\begin{figure}[!h]
+\centering
+%\includegraphics[width=\textwidth]{figures/q1.pdf}
+\caption{\textbf{Reported and predicted biweekly incidence for Bornholm, the Faroe Islands, and four localities in Iceland.} The observed data is in blue. For the predicted time-series, the mean value of incidence simulations is plotted as a dark red line, with 95\% confidence intervals given in light red. Bornholm~: $R^2=0.78$; Faroe Islands~: $R^2=0.55$; Reykjav\'{i}k~: $R^2=0.73$; Hafnarfj\"{o}r\dh{}ur~: $R^2=0.86$; Akureyri~: $R^2=0.80$; Vestmannaeyjar~: $R^2=0.77$.}
+\label{figIncidence}
+\end{figure}
+
+
+
+\begin{figure}[!h]
+\centering
+%\includegraphics[width=\textwidth]{figures/q2.pdf}
+\caption{\textbf{Reporting rates and seasonalities.} Seasonality is plotted as a function of the biweek, with 95\% confidence intervals in light blue.}
+\label{figSims}
+\end{figure}
+
+
+\begin{figure}[!h]
+\centering
+%\includegraphics[width=\textwidth]{figures/q3.pdf}
+\caption{\textbf{Predictability of epidemic sizes.} The mean predicted size of each epidemic as a function of its observed size, from ten thousand simulations. Red lines are the regression lines with the follow coefficients of determination and slopes~-- Bornholm~: $R^2=0.76$, gradient~$=1.07$; Faroe Islands~: $R^2=0.77$, gradient~$=0.60$; Reykjav\'{i}k~: $R^2=0.64$, gradient~$=0.96$; Hafnarfj\"{o}r\dh{}ur~: $R^2=0.88$, gradient~$=1.18$; Akureyri~: $R^2 = 0.49$, gradient~$=0.72$; Vestmannaeyjar~: $R^2=0.76$, gradient~$=1.23$. The green line is the zero-intercept, gradient-one line representing a one-to-one match between observation and prediction.}
+\label{fig_sizes}
+\end{figure}
+
+
+
+
+
+\end{document}
+
