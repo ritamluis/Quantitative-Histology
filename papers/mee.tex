@@ -70,22 +70,28 @@
 % Title must be 150 characters or less
 \begin{flushleft}
 {\Large
-\textbf{Title Here}
+\textbf{Robust extraction of quantitative structural and textural information from histological images}
 }
 % Insert Author names, affiliations and corresponding author email.
 \\
 Q. Caudron$^{1,\ast}$, 
 R. Garnier$^{1}$, 
-T. A. Aboellail$^2$,
-Others, 
-B. T. Grenfell$^{1,3}$
-A. Graham$^1$,
+K. A. Watt$^{2}$, 
+J. G. Pilkington$^{2}$,
+J. M. Pemberton$^{2}$,
+T. A. Aboellail$^3$,
+B. T. Grenfell$^{1,4}$
+A. L. Graham$^1$,
 \\
 \bf{1} Department of Ecology and Evolutionary Biology, Princeton University, Princeton, NJ, USA
 \\
-\bf{2} Department of Microbiology, Immunology, and Pathology, Colorado State University, Fort Collins, CO, USA
+
+\bf{2} Institute of Evolutionary Biology, University of Edinburgh, Edinburgh, EH9 3FL, UK
 \\
-\bf{3} Fogarty International Center, National Institutes of Health, Bethesda, MD, USA
+
+\bf{3} Department of Microbiology, Immunology, and Pathology, Colorado State University, Fort Collins, CO, USA
+\\	
+\bf{4} Fogarty International Center, National Institutes of Health, Bethesda, MD, USA
 \\
 $\ast$ E-mail: qcaudron@princeton.edu
 \end{flushleft}
@@ -121,20 +127,16 @@ $\ast$ E-mail: qcaudron@princeton.edu
 
 \section*{Introduction}
 
+%The structural properties and visual appearance of organ tissue can provide valuable information about the condition of health of an individual, yielding insights into disease prevalence or revealing evidence of a particular pathology. 
+Histopathology is widely practiced in medical and veterinary fields, where it is an essential tool in the diagnosis and discovery of infections, cancers, damaged tissue, and other conditions. In clinical settings, interpretation of histological samples is typically performed via microscopy by a pathologist. This results in a descriptive analysis of several aspects of the tissue's presentation, such as nuclear density, general cell morphology, or the presence of tumours. This time-intensive and expensive process is sensitive to intra- and inter-operator variation and subjectivity in interpretation. In addition, information in pathology reports is qualitative or semi-quantitative, which restricts the use of statistical tools for classification or quantitative analysis.
 
-Where histopathology is used
+Recent advances in imaging technology and computational power have led to the emergence of a quantitative approach to histopathological analysis. Computer vision algorithms are applied to digitised histological preparations, extracting quantitative information about structural features in the tissue. These methods have been successfully applied to the high-throughput analysis of tissue banks for disease classification and phenotyping (Peng2008), and, increasingly, to aid in the detection and identification of disease in hospital settings (Tang2009). Computer-aided diagnosis combines image processing and artificial intelligence methods to aid pathologists in detecting and quantifying irregularities in the tissue, and is currently demonstrating extremely promising results in the fields of diagnostic and intervention radiology. 
 
+In both high-throughput and laboratory settings, a certain level of image quality is almost guaranteed, allowing image processing algorithms to successfully and reproducibly identify structures of interest in digital images. However, little progress has been made in applying these methods to field ecology, where on-site conditions often constrain the state of tissue samples or capture of images. 
 
-
-Current problems with histopathology
-
-
-
-Advantages of automation
+Here, we demonstrate that quantitative information can be extracted from high-variance images in a robust manner. We apply our algorithms to measures of liver state in the Soay sheep, from 4306 images of histological slides prepared from the liver necropsies of 141 individuals. We begin by presenting the Soay sheep system and associated data. We then describe the image capture process and preprocessing applied to images with the aim of reducing some of the variance in their colour, luminosity, and contrast. Then, we present various measures of structure and texture, which we compare with a traditional pathologist's analysis of the slides. We finish by comparing these measures to a traditional histological analysis of these slides by pathologist grading.
 
 
-
-Our methodology
 
 
 
@@ -148,47 +150,98 @@ Our methodology
 
 \section*{Methods}
 
-Image capture pipeline
+
+\subsection*{Soay Sheep}
+
+Background on the Soay. 
+
+The data we have : physical measurements, necropsies.
+
+Histology preparation ( slice, stain, slides per individual, ... )
 
 
 
-Image format and preprocessing
 
 
 
-Sigmoid adjustment for contrast
+
+\subsection*{Image Acquisition and Processing}
+
+Imaging was performed on a Nikon Eclipse 80i bright-field microscope with a Nikon CFI Plan Achromat 4x objective. Fields of view measuring $2\times3$mm were captured in RAW format on a Canon 600D SLR camera, attached to the microscopy with an Amscope DSLR adaptor. For each image, the field of view and focus were found manually. Up to five 18-megapixel images were captured from each slide, at 14 bits per channel, in the three-channel sRGB colour space. Fields of view were selected to ensure they did not contain tears, folds, or other imperfections in the tissue caused by sample preparation.
+
+Images were treated with a preprocessing stage upon capture. Saturation was increased globally, but also preferentially in low-saturation pixels. Yellows were reduced, to compensate for the microscope's lamp, and luminosity was increased in the highlights in order to improve separation of the tissue from the background. Finally, local midtone contrast was enhanced to increase sharpness without amplifying noise.
+
+After acquisition and preprocessing, images were processed in Python with the scikit-image package. Images were first sigmoid-corrected for contrast, and converted to relative luminance greyscale. Thresholding was performed adaptively, where the threshold is defined as the Gaussian-weighted mean in a 301 pixel block centred around each pixel. Finally, connected components under 100 pixels in size were removed.
 
 
 
-Adaptive threshold on luminosity
+\subsection*{Measures}
+
+Seven measures were calculated from processed images.
 
 
 
-Cleaning - Removing small objects
+
+ In order to characterise aspects of the structure, texture, and spatial distribution of the tissue, 
+
+ : lacunarity, entropy, directionality, characteristic scale, the number and mean size of inflammatory foci, and the tissue to sinusoid ratio.
 
 
 
-Measures :
-GABOR - phase-insensitive
 1 Gabor filter directionality
+
 2 Gabor filter scale
+
+NOTE GABOR - phase-insensitive
+
 3 normalised Lacunarity
+
 4 Shannon entropy
-5 Deconvolution foci count
-6 Tissue / sinusoid ratio
+
+5 Deconvolution foci count and size
+
+6 Tissue to sinusoid ratio
 
 
 
 
 
-
-
-
-
-
-
-% Results and Discussion can be combined.
 \section*{Results}
+
+\subsection*{Measure Distributions}
+
+Plots of distributions ( include bighorn ? )
+
+Intra- and inter-individual variances
+
+PCA
+
+
+
+
+
+
+
+\subsection*{Pathologist Analysis}
+
+Correlation with image measures
+
+
+
+
+
+
+
+
+
+\section*{Discussion}
+
+
+
+
+
+
+
 
 	 
 
@@ -218,8 +271,6 @@ GABOR - phase-insensitive
 
 
 
-
-\section*{Discussion}
 
 
 

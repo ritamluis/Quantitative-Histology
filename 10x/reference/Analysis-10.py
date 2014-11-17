@@ -42,7 +42,7 @@ lengthscale = 301
 
 
 
-image = exposure.equalize_adapthist(io.imread("/Users/qcaudron/repositories/Quantitative-Histology/10x/data/Sheep24-10x-19.jpg"))#files[4]))
+image = exposure.equalize_adapthist(io.imread("/Users/qcaudron/repositories/Quantitative-Histology/10x/data/Sheep16-10x-19.jpg"))#files[4]))
 #image = io.imread(files[4])
 io.imshow(image)
 plt.grid(False)
@@ -91,7 +91,7 @@ ent /= ent.max()
 local_density -= local_density.min()
 local_density /= local_density.max()
 
-io.imshow(2 * ent + local_density)
+io.imshow(ent)
 plt.grid(False)
 
 # <codecell>
@@ -119,7 +119,7 @@ for c in C :
     vals.append(local_density.T[c.astype(int)].sum())
 cent = C[np.argmin(centroid / np.array(vals))]
     
-ax.plot(cent[:, 1], cent[:, 0], lw=5, c="k", alpha = 0.7)
+            ax.plot(cent[:, 1], cent[:, 0], lw=5, c="k", alpha = 0.7)
 
 plt.grid(False)
 

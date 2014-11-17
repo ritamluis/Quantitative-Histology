@@ -1,4 +1,4 @@
-\begin{thebibliography}{1}
+\begin{thebibliography}{}
 \providecommand{\url}[1]{\texttt{#1}}
 \providecommand{\urlprefix}{URL }
 \expandafter\ifx\csname urlstyle\endcsname\relax
@@ -12,12 +12,5 @@
   \begin{quotation}\noindent\textsc{Key:} #1\\
   \textsc{Annotation:}\ #2\end{quotation}}
 \providecommand{\eprint}[2][]{\url{#2}}
-
-\bibitem{CAUDRON:2013wl}
-CAUDRON Q, Lyn-Adams C, Aston JAD, Frenguelli BG, Moffat KG (2013)
-  {Quantitative assessment of ommatidial distortion in Drosophila
-  melanogaster.}
-\newblock Drosophila Information Service 96: 136--143.
-\bibAnnoteFile{CAUDRON:2013wl}
 
 \end{thebibliography}
