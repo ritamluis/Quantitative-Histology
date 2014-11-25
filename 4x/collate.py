@@ -63,7 +63,9 @@ ratio = []
 inflsize = []
 inflcount = []
 inflstd = []
-
+mindist = []
+ifdist = []
+blur = []
 
 
 
@@ -105,6 +107,9 @@ for sheep in uniquenames :
 				inflcount.append(thread["inflcount"][i])
 				inflsize.append(thread["inflsize"][i])
 				inflstd.append(thread["inflstd"][i])
+				mindist.append(thread["mindist"][i])
+				ifdist.append(thread["ifdist"][i])
+				blur.append(thread["blur"][i])
 
 
 
@@ -132,11 +137,16 @@ Entstd = { "Sheep" : id, "Image" : imageid, "stdEntropy" : entstd[:, 0].T }
 
 
 
+Dist = { "Sheep" : id, "Image" : imageid, "MinDist" : mindist, "IFDist" : ifdist }
+Blur = { "Sheep" : id, "Image" : imageid, "Blur" : blur }
 
-pd.DataFrame(NLac).to_csv("results/normalised_lacunarity.csv", cols = ["Sheep", "Image", "Lacunarity"])
-pd.DataFrame(Ent).to_csv("results/entropy.csv", cols = ["Sheep", "Image", "Entropy"])
-pd.DataFrame(Entstd).to_csv("results/entropy_std.csv", cols = ["Sheep", "Image", "stdEntropy"])
 
+
+pd.DataFrame(NLac).to_csv("results/normalised_lacunarity.csv", columns = ["Sheep", "Image", "Lacunarity"])
+pd.DataFrame(Ent).to_csv("results/entropy.csv", columns = ["Sheep", "Image", "Entropy"])
+pd.DataFrame(Entstd).to_csv("results/entropy_std.csv", columns = ["Sheep", "Image", "stdEntropy"])
+pd.DataFrame(Dist).to_csv("results/interfoci_dist.csv", columns = ["Sheep", "Image", "MinDist", "IFDist"])
+pd.DataFrame(Blur).to_csv("results/blur.csv", columns = ["Sheep", "Image", "Blur"])
 
 
 
@@ -146,7 +156,7 @@ pd.DataFrame(Entstd).to_csv("results/entropy_std.csv", cols = ["Sheep", "Image",
 
 Gabor = { "Sheep" : id, "Image" : imageid, "Scale" : np.array(scale).T, "Directionality" : np.array(directionality).T }
 
-pd.DataFrame(Gabor).to_csv("results/gabor_filters.csv", cols = ["Sheep", "Image", "Scale", "Directionality"])
+pd.DataFrame(Gabor).to_csv("results/gabor_filters.csv", columns = ["Sheep", "Image", "Scale", "Directionality"])
 
 
 

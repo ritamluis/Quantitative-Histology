@@ -45,11 +45,15 @@ foci = pd.read_csv("results/foci.csv").drop(["Unnamed: 0"], 1)
 lac = pd.read_csv("results/normalised_lacunarity.csv").drop(["Unnamed: 0"], 1)
 gabor = pd.read_csv("results/gabor_filters.csv").drop(["Unnamed: 0"], 1)
 ts = pd.read_csv("results/tissue_sinusoid_ratio.csv").drop(["Unnamed: 0"], 1)
+blur = pd.read_csv("results/blur.csv").drop(["Unnamed: 0"], 1)
+distances = pd.read_csv("results/interfoci_dist.csv").drop(["Unnamed: 0"], 1)
 
 raw_image = pd.merge(lac, ent,
 	on=["Sheep", "Image"]).merge(foci, 
 	on=["Sheep", "Image"]).merge(gabor,
 	on=["Sheep", "Image"]).merge(ts, 
+	on=["Sheep", "Image"]).merge(blur, 
+	on=["Sheep", "Image"]).merge(distances, 
     on=["Sheep", "Image"])
 raw_image.rename(columns = {	"meanSize" : "FociSize", 
 								"TSRatio" : "TissueToSinusoid",
@@ -112,15 +116,12 @@ def flatten(m) :
 
 
 # Generate all combinations of objects in a list
-def combinatorial(l, short = False) :
+def combinatorial(l, short = np.inf) :
 	out = []
 
 	for numel in range(len(l)) :
 		for i in itertools.combinations(l, numel+1) :
-			if short :
-				if len(list(i)) < 5 :
-					out.append(list(i))
-			else :
+			if len(list(i)) < short :
 				out.append(list(i))
 
 	return out
@@ -420,10 +421,14 @@ def mmPredict(df, ols) :
 
 # <codecell>
 
+raw_image.columns
+
+# <codecell>
+
 # CLEAN DATA
 
 physcols = ["Weight", "Sex", "AgeAtDeath", "Foreleg", "Hindleg", "E", "CES", "RES"]
-imagecols = ["Entropy", "Lacunarity", "Inflammation", "Scale", "Directionality", "FociCount", "FociSize", "TissueToSinusoid"]
+imagecols = ["Entropy", "Lacunarity", "Inflammation", "Scale", "Directionality", "FociCount", "FociSize", "TissueToSinusoid", "Blur", "MinDist", "IFDist"]
 histcols = ["LobularCollapse", "InterfaceHepatitis", "ConfluentNecrosis", "LnApRi", "PortalInflammation", "BDHyperplasia", "Fibrosis", "TawfikTotal", "MeanHepSize", "MinHepSize", "MaxHepSize"]
 
 
@@ -503,24 +508,20 @@ data.rename(columns = {"Lobular_collapse" : "LobularCollapse",
 
 # <codecell>
 
-len(data[delayer([histcols, imagecols])].dropna())
-
-# <codecell>
-
 pcols = physcols[:]
 pcols.remove("AgeAtDeath")
 
 print " -------- 1"
-best_lm_phys, stuff_lm_phys = big_ass_matrix(df=sheep, y=physcols, x=imagecols, group=None, short=False)
+best_lm_phys, stuff_lm_phys = big_ass_matrix(df=sheep, y=physcols, x=imagecols, group=None, short=5)
 
 print " -------- 2"
-best_lm_hist, stuff_lm_hist = big_ass_matrix(df=sheep, y=histcols, x=imagecols, group=None, short=False)
+best_lm_hist, stuff_lm_hist = big_ass_matrix(df=sheep, y=histcols, x=imagecols, group=None, short=5)
 
 print " -------- 3"
-best_mm_phys, stuff_mm_phys = big_ass_matrix(df=sheep, y=pcols, x=imagecols, group="AgeAtDeath", short=False)
+best_mm_phys, stuff_mm_phys = big_ass_matrix(df=sheep, y=pcols, x=imagecols, group="AgeAtDeath", short=5)
 
 print " -------- 4"
-best_mm_hist, stuff_mm_hist = big_ass_matrix(df=sheep, y=histcols, x=imagecols, group="AgeAtDeath", short=False)
+best_mm_hist, stuff_mm_hist = big_ass_matrix(df=sheep, y=histcols, x=imagecols, group="AgeAtDeath", short=5)
 
 # <codecell>
 
@@ -625,7 +626,6 @@ plt.plot(y1,y1)
 
 # <codecell>
 
-idx[0]
 
 # <codecell>
 
@@ -759,5 +759,18 @@ a.model.exog_names
 
 # <codecell>
 
-sheep
+
+# <codecell>
+
+raw_data[raw_data.TissueToSinusoid == raw_data.TissueToSinusoid.max()]
+
+# <codecell>
+
+df = sheep[["MeanHepSize", "Directionality"]].dropna()
+df["Intercept"] = np.ones(len(df))
+ols = sm.GLS(endog=df.MeanHepSize, exog=df[["Directionality", "Intercept"]]).fit()
+ols.summary()
+
+# <codecell>
+
 

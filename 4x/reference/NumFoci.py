@@ -10,7 +10,9 @@ import numpy as np
 import skimage as ski
 from skimage import io, filter, color, exposure, morphology, feature, draw, measure, transform
 
-figsize(16, 10)
+import matplotlib
+%matplotlib inline
+matplotlib.rcParams["figure.figsize"] = (16, 10)
 
 # <codecell>
 

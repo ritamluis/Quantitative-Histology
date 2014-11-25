@@ -15,9 +15,11 @@ from sklearn.mixture import GMM
 
 from scipy import spatial, ndimage, signal, stats
 
+import matplotlib
+%matplotlib inline
 import matplotlib.pyplot as plt
 import seaborn
-figsize(16, 10)
+matplotlib.rcParams["figure.figsize"] = (16, 10)
 
 #%matplotlib inline
 
@@ -42,7 +44,7 @@ lengthscale = 301
 
 
 
-image = exposure.equalize_adapthist(io.imread("/Users/qcaudron/repositories/Quantitative-Histology/10x/data/Sheep16-10x-19.jpg"))#files[4]))
+image = exposure.equalize_adapthist(io.imread(files[4]))
 #image = io.imread(files[4])
 io.imshow(image)
 plt.grid(False)
@@ -114,12 +116,13 @@ C = measure.find_contours(bw, 0.5)
 centroid = []
 vals = []
 for c in C :
-#    ax.plot(c[:, 1], c[:, 0], lw=5)
+    ax.plot(c[:, 1], c[:, 0], lw=5)
     centroid.append(np.linalg.norm([c[:, 1].mean() - bw.shape[1] / 2, c[:, 0].mean() - bw.shape[0] / 2]))
     vals.append(local_density.T[c.astype(int)].sum())
+
 cent = C[np.argmin(centroid / np.array(vals))]
     
-            ax.plot(cent[:, 1], cent[:, 0], lw=5, c="k", alpha = 0.7)
+ax.plot(cent[:, 1], cent[:, 0], lw=5, c="k", alpha = 0.7)
 
 plt.grid(False)
 

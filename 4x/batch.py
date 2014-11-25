@@ -10,6 +10,7 @@ import numpy as np
 import skimage as ski
 from skimage import io, feature, morphology, filter, exposure, color, transform, measure
 import scipy.signal as sig
+from scipy.spatial import distance
 from scipy.ndimage import maximum_filter, minimum_filter, binary_fill_holes
 
 # Stats
@@ -47,6 +48,13 @@ inflstd = []
 
 # Tissue to sinusoid ratio
 ratio = []
+
+# Average minimum interfocus distance
+mindist = []
+ifdist = []
+
+# Blur index
+blur = []
 
 
 
@@ -92,44 +100,37 @@ for f in files :
     print "Thread %s. Opening file : %s" % (sys.argv[1], f)
 
 
-    # If it's not been processed before
-    if not os.path.exists(f + "_processed.jpg") :
+    ### PROCESSING
+        
+    # Read the image
+    A = io.imread(f)
+        
+    # Constrast enhancement
+    print "Thread %s. Sigmoid transform for contrast." % sys.argv[1]
+    B = exposure.adjust_sigmoid(A, gain=12)
+        
+    # Extract luminosity
+    print "Thread %s. Generating luminosity." % sys.argv[1]
+    C = color.rgb2xyz(B)[:, :, 1]
+    
+    # Apply adaptive thresholding
+    print "Thread %s. Performing adaptive thresholding." % sys.argv[1]
+    D = filter.threshold_adaptive(C, 301)
+    D2 = filter.threshold_adaptive(C, 301, offset=-0.01)
+        
+    # Clean
+    print "Thread %s. Cleaning image." % sys.argv[1]
+    E = morphology.remove_small_objects(~morphology.remove_small_objects(~D, 100), 100)
+    E2 = morphology.remove_small_objects(~morphology.remove_small_objects(~D2, 100), 100)
+    blur.append(np.abs(E[:2000, 1000:-1000] - E2[:2000, 1000:-1000]).sum() / 6368000.)
 
-        ### PROCESSING
+    # Save to disk
+    io.imsave(f + "_processed.jpg", ski.img_as_float(E))
         
-        # Read the image
-        A = io.imread(f)
-        
-        # Constrast enhancement
-        print "Thread %s. Sigmoid transform for contrast." % sys.argv[1]
-        B = exposure.adjust_sigmoid(A, gain=12)
-        
-        # Extract luminosity
-        print "Thread %s. Generating luminosity." % sys.argv[1]
-        C = color.rgb2xyz(B)[:, :, 1]
-        
-        # Apply adaptive thresholding
-        print "Thread %s. Performing adaptive thresholding." % sys.argv[1]
-        D = filter.threshold_adaptive(C, 301)
-        
-        # Clean
-        print "Thread %s. Cleaning image." % sys.argv[1]
-        E = morphology.remove_small_objects(~morphology.remove_small_objects(~D, 100), 100)
+    # Downsample for Gabor filtering
+    print "Thread %s. Downsampling image." % sys.argv[1]
+    Es = ski.img_as_float(transform.rescale(E, 0.25))
 
-        # Save to disk
-        io.imsave(f + "_processed.jpg", ski.img_as_float(E))
-        
-        # Downsample for Gabor filtering
-        print "Thread %s. Downsampling image." % sys.argv[1]
-        Es = ski.img_as_float(transform.rescale(E, 0.25))
-
-
-    else :
-
-        # Otherwise, we've processed it before, so read it in for speed
-        A = io.imread(f)
-        E = ski.img_as_float(io.imread(f + "_processed.jpg"))
-        Es = ski.img_as_float(transform.rescale(E, 0.25))
     print "Thread %s. Image already processed, downsampled." % sys.argv[1]
         
 
@@ -342,7 +343,7 @@ for f in files :
                     morphology.disk(25)),
                 ),
             250),
-        27)
+        55)
 
 
 
@@ -368,7 +369,7 @@ for f in files :
     inflammation = \
     maximum_filter(
         rawinflammation,
-        29)
+        55)
 
    
 
@@ -406,6 +407,23 @@ for f in files :
 
 
 
+    # Mean minimum pairwise interfocal distance
+
+    regprops = measure.regionprops(labelled)
+    pairwise = distance.squareform(distance.pdist([regprops[i].centroid for i in range(regions-1)]))
+
+
+    for i in range(regions-1) :
+        pairwise[i, i] = np.inf
+
+    ifdist.append(pairwise.min(axis=0).mean())
+    mindist.append(pairwise.min())
+
+
+
+
+
+
 
 
 
@@ -439,6 +457,9 @@ results["scale"] = scale
 results["name"] = name
 results["ID"] = imageid
 results["roylac"] = nonlac
+results["blur"] = blur
+results["ifdist"] = ifdist
+results["mindist"] = mindist
 
 F = open("results/thread_%s" % sys.argv[1], "w")
 pickle.dump(results, F)
